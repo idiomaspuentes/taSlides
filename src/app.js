@@ -19,7 +19,7 @@ function showError(){
 }
 
 document.getElementById('submit').addEventListener('click', async () => {
-    const input = document.getElementById('resource').value
+    const input = document.getElementById('resource').value.toLowerCase()
 
     try{
 
