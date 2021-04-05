@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tA Slides viewer</title>
+    <link rel="stylesheet" href="dist/style.css">
+    <script src="dist/main.js" defer></script>
+</head>
+<body>
+    <div id="welcome" class="slide-in-bck-center">
+        <h1>Welcome to translationAcademy slides <sup>alpha</sup></h1>
+        <p>enter the resource folder and name</p>
+        <input id="resource" type="text" placeholder="e.g. translate/figs-inclusive">
+        <input id="submit" type="button" value="submit">
+    </div>
+    <div class="reveal hide">
+        <div class="slides">
+    
+            <section>
+                <h2 id="course-title">Course Title</h2>
+                <p id="course-subtitle">Course subtitle</p>
+            </section>
+    
+            <section data-markdown="markdown-src"
+             data-separator="(?:(\n\r?)+#)"
+             data-separator-vertical="(?:(?<=.{3,})(?:\.\s|\n\r?)|(?<=##+ *.+)(\n\r?)+)"
+             data-separator-notes="^Note:"
+             data-charset="urf-8">
+                <!--
+                    Note that Windows uses `\r\n` instead of `\n` as its linefeed character.
+                    For a regex that supports all operating systems, use `\r?\n` instead of `\n`.
+                -->
+            </section>
+    
+            <section>
+                <h2 id="bye-message">Thank you for viewing this lesson! ;)</h2>
+            </section>
+    
+        </div>
+    </div>
+
+</body>
+</html>
