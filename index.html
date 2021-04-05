@@ -13,9 +13,10 @@
         <h1>Welcome to translationAcademy slides <sup>alpha</sup></h1>
         <p>enter the resource folder and name</p>
         <input id="resource" type="text" placeholder="e.g. translate/figs-inclusive">
+        <label id="error-message" class="error" for="resource">resource not found</label>
         <input id="submit" type="button" value="submit">
     </div>
-    <div class="reveal hide">
+    <div class="reveal hide" id="slider-wrapper">
         <div class="slides">
     
             <section>
@@ -27,7 +28,8 @@
              data-separator="(?:(\n\r?)+#)"
              data-separator-vertical="(?:(?<=.{3,})(?:\.\s|\n\r?)|(?<=##+ *.+)(\n\r?)+)"
              data-separator-notes="^Note:"
-             data-charset="urf-8">
+             data-charset="utf-8"
+             id="markdown-section">
                 <!--
                     Note that Windows uses `\r\n` instead of `\n` as its linefeed character.
                     For a regex that supports all operating systems, use `\r?\n` instead of `\n`.
