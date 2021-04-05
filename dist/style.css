@@ -26,6 +26,12 @@ body{
     z-index: 100;
 }
 
+#welcome h1{
+  text-align: center;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
 #welcome sup{
     font-size: 10pt;
     font-weight: 300;
