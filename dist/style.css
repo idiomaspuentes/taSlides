@@ -10,6 +10,7 @@ body{
     font-family: 'Source Sans Pro', 'open sans';
     display: flex;
     flex-wrap: wrap;
+    text-align: center;
     flex-direction: column;
     justify-content: center;
     align-items: center;
