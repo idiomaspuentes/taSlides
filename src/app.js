@@ -54,6 +54,8 @@ async function setPresentation(input){
             const category = parts[0]
             const module = parts[1]
             setShare(category, module)
+            document.title = `${title} - translationAcademy slides`
+            history.pushState({page:1}, document.title, `?cat=${category}&mod=${module}`)
 
             hideWelcome()
 
