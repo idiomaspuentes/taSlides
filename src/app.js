@@ -141,10 +141,10 @@ function setShare(category = '', module = ''){
         shareLink += `/?cat=${category}&mod=${module}`
     
     let telegram = document.getElementById("telegram")
-          telegram.href = `https://t.me/share/url?url=${encodeURIComponent(shareLink)}&text={Shared from translationAcademy Slides}`
+          telegram.href = `https://t.me/share/url?url=${encodeURIComponent(shareLink)}&text=Shared from translationAcademy Slides`
 
     let whatsapp = document.getElementById("whatsapp")  
-          whatsapp.href = `whatsapp://send?text=${encodeURIComponent(shareLink)}\n\nShared from translationAcademy Slides`
+          whatsapp.href = `whatsapp://send?text=${encodeURIComponent(shareLink)} ${encodeURIComponent('\n\nShared from translationAcademy Slides')}`
 
     let copyLink = document.getElementById("copy-link")
           copyLink.href = `${shareLink}`
