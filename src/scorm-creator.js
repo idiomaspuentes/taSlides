@@ -34,7 +34,7 @@ export default function createScorm(title, subtitle, path, version = "1.0", org 
                         return ''
                 })
                 .replace(/markdown-src/gm, (match, p) => {
-                        return `${url}/01.md`
+                        return `${url}`
                 })
                 
                 zip.file("index.html", newIndex)
