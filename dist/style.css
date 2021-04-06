@@ -2,10 +2,6 @@ body{
   background-color: rgb(7, 12, 49);
 }
 
-.hide{
-  display: none;
-}
-
 #welcome{
     font-family: 'Source Sans Pro', 'open sans';
     display: flex;
@@ -54,7 +50,6 @@ label.error{
   color: rgb(206, 73, 73);
   margin-bottom: 10px;
   font-size: 10pt;
-  display: none;
 }
 
 #welcome #submit{
@@ -70,6 +65,14 @@ label.error{
 #welcome #submit:hover{
     background-color: #f1f5ff;
     color:  rgb(5, 7, 22);
+}
+
+#share-presentation{
+  font-family: 'Source Sans Pro', 'open sans';
+  position: absolute;
+  z-index: 101;
+  top: 0;
+  margin: 20px;
 }
 
 .slide-in-bck-center {
@@ -156,3 +159,6 @@ label.error{
     }
   }
   
+.hide{
+  display: none!important;
+}
