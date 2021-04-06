@@ -9,12 +9,37 @@
     <script src="dist/main.js" defer></script>
 </head>
 <body>
-    <div id="welcome" class="slide-in-bck-center">
+    <div id="welcome" class="hide">
         <h1>Welcome to translationAcademy slides <sup>alpha</sup></h1>
         <p>enter the resource folder and name</p>
         <input id="resource" type="text" placeholder="e.g. translate/figs-inclusive">
-        <label id="error-message" class="error" for="resource">resource not found</label>
+        <label id="error-message" class="error hide" for="resource">resource not found</label>
         <input id="submit" type="button" value="submit">
+    </div>
+    <div id="share-presentation">
+        <div class="dropdown">
+            <a href="#" class="btn btn-link text-secondary dropdown-toggle" tabindex="0">
+              share <i class="icon icon-caret"></i>
+            </a>
+            <!-- menu component -->
+            <ul class="menu">
+                <li class="menu-item">
+                    <a id="whatsapp" href="#" data-action="share/whatsapp/share">
+                        <i class="icon icon-link"></i> Whatsapp
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a id="telegram" href="#">
+                        <i class="icon icon-link "></i> Telegram
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a id="copy-link" href="#">
+                    <i class="icon icon-link"></i> Share Link
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
     <div class="reveal hide" id="slider-wrapper">
         <div class="slides">

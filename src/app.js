@@ -2,24 +2,32 @@ import Reveal from 'reveal.js'
 import Markdown from 'reveal.js/plugin/markdown/markdown.esm.js'
 import 'reveal.js/dist/reveal.css'
 import 'reveal.js/dist/theme/black.css'
+import './spectre.scss'
 
-function handleErrors(response) {
-    if (!response.ok) {
-        throw Error(response.statusText);
-    }
-    return response;
-}
+const baseUrl = window.location.origin
+const queryString = window.location.search
+const urlParams = new URLSearchParams(queryString)
+const category = urlParams.get('cat')
+const module = urlParams.get('mod')
 
-function showError(){
-    let error = document.getElementById('error-message')
-        error.style.display = 'block'
-        error.classList.add('slide-in-bck-center')
+setShare()
 
-    document.getElementById('resource').classList.add('error')
+if(category && module){
+    const input = document.getElementById('resource')
+    const resource = `${category}/${module}`
+    input.value = resource
+    setPresentation(resource)
+}else{
+    showWelcome()
 }
 
 document.getElementById('submit').addEventListener('click', async () => {
     const input = document.getElementById('resource').value.toLowerCase()
+    setPresentation(input)
+})
+
+
+async function setPresentation(input){
 
     try{
 
@@ -42,19 +50,18 @@ document.getElementById('submit').addEventListener('click', async () => {
     
         if(title && subtitle && courseContent){
 
+            const parts = input.split('/')
+            const category = parts[0]
+            const module = parts[1]
+            setShare(category, module)
+
+            hideWelcome()
+
             document.getElementById('course-title').innerHTML = title
             document.getElementById('course-subtitle').innerHTML = subtitle
             document.getElementById('markdown-section').setAttribute("data-markdown", courseURL);
             document.getElementById('slider-wrapper').classList.remove('hide')
     
-            let welcome = document.getElementById('welcome')
-            welcome.classList.add("slide-out-left")
-            setTimeout( () => { 
-    
-                welcome.style.display = 'none'
-    
-            }, 1000)
-
             let deck = new Reveal({
                 plugins: [ Markdown ]
              })
@@ -91,9 +98,11 @@ document.getElementById('submit').addEventListener('click', async () => {
             
                 console.log(`${viewed.length}/${totalSlides} slides viewed. (${progress}%)`)
             });
+            
     
         }else{
 
+            showWelcome()
             showError()
             console.error('resource not found')
     
@@ -101,6 +110,7 @@ document.getElementById('submit').addEventListener('click', async () => {
 
     }catch(err){
 
+        showWelcome()
         showError()
         console.log('fuera')
         console.error(err)
@@ -108,8 +118,55 @@ document.getElementById('submit').addEventListener('click', async () => {
 
     }
 
-    
-    
-    
-})
+}
 
+function showWelcome(){
+    let welcome = document.getElementById('welcome')
+        welcome.classList.toggle('hide')
+        welcome.classList.add("slide-in-bck-center")
+}
+
+function hideWelcome(){
+    let welcome = document.getElementById('welcome')
+        welcome.classList.add("slide-out-left")
+        setTimeout( () => { 
+            welcome.style.display = 'none'
+        }, 1000)
+}
+
+function setShare(category = '', module = ''){
+    let shareLink = baseUrl
+
+    if(category && module)
+        shareLink += `/?cat=${category}&mod=${module}`
+    
+    let telegram = document.getElementById("telegram")
+          telegram.href = `https://t.me/share/url?url=${encodeURIComponent(shareLink)}&text={Shared from translationAcademy Slides}`
+
+    let whatsapp = document.getElementById("whatsapp")  
+          whatsapp.href = `whatsapp://send?text=${encodeURIComponent(shareLink)}\n\nShared from translationAcademy Slides`
+
+    let copyLink = document.getElementById("copy-link")
+          copyLink.href = `${shareLink}`
+    
+    copyLink.addEventListener("click", (e) => {
+        e.preventDefault()
+        navigator.clipboard.writeText(copyLink.href)
+    })
+    
+}     
+
+function handleErrors(response) {
+    if (!response.ok) {
+        throw Error(response.statusText);
+    }
+    return response;
+}
+
+function showError(){
+    let error = document.getElementById('error-message')
+        error.classList.toggle('hide')
+        error.classList.add('slide-in-bck-center')
+
+    document.getElementById('resource').classList.add('error')
+}
