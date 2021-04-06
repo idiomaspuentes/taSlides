@@ -82,7 +82,7 @@ async function setPresentation(input){
             const category = parts[0]
             const module = parts[1]
             
-            setShare(category, module)
+            setShare(category, module, title)
 
             let href = `?cat=${category}&mod=${module}`
 
@@ -172,17 +172,20 @@ function hideWelcome(){
         }, 1000)
 }
 
-function setShare(category = '', module = ''){
+function setShare(category = '', module = '', title = ''){
     let shareLink = baseUrl
+    let message = '\n\nShared from translationAcademy Slides'
+
+    if (title) message = `\n\n${title} | Slides Presentation ` + message
 
     if(category && module)
         shareLink += `?cat=${category}&mod=${module}`
     
     let telegram = document.getElementById("telegram")
-          telegram.href = `https://t.me/share/url?url=${encodeURIComponent(shareLink)}&text=Shared from translationAcademy Slides`
+          telegram.href = `https://t.me/share/url?url=${encodeURIComponent(shareLink)}&text=${encodeURIComponent(message)}`
 
     let whatsapp = document.getElementById("whatsapp")  
-          whatsapp.href = `whatsapp://send?text=${encodeURIComponent(shareLink)} ${encodeURIComponent(' \n\nShared from translationAcademy Slides')}`
+          whatsapp.href = `whatsapp://send?text=${encodeURIComponent(shareLink)} ${encodeURIComponent(message)}`
 
     let copyLink = document.getElementById("copy-link")
           copyLink.href = `${shareLink}`
