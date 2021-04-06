@@ -1,5 +1,5 @@
 body{
-  background-color: rgb(7, 12, 49);
+  background-color: rgb(6, 10, 37)!important;
 }
 
 #welcome{
@@ -68,7 +68,7 @@ label.error{
     color:  rgb(5, 7, 22);
 }
 
-#share-presentation{
+#menu{
   font-family: 'Source Sans Pro', 'open sans';
   position: absolute;
   z-index: 101;

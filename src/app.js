@@ -1,14 +1,19 @@
 import Reveal from 'reveal.js'
 import Markdown from 'reveal.js/plugin/markdown/markdown.esm.js'
+import createScorm from './scorm-creator.js'
 import 'reveal.js/dist/reveal.css'
 import 'reveal.js/dist/theme/black.css'
 import './spectre.scss'
 
-const baseUrl = window.location.href
+const baseUrl = window.location.origin + window.location.pathname
 const queryString = window.location.search
 const urlParams = new URLSearchParams(queryString)
 const category = urlParams.get('cat')
 const module = urlParams.get('mod')
+const print = urlParams.has('print-pdf')
+console.log(print)
+
+document.querySelector('#home a').href = baseUrl
 
 setShare()
 
@@ -25,6 +30,29 @@ document.getElementById('submit').addEventListener('click', async () => {
     const input = document.getElementById('resource').value.toLowerCase()
     setPresentation(input)
 })
+
+const resource = document.getElementById('resource');
+resource.addEventListener('keyup', event => {
+    
+    if (event.key === 'Enter' || event.keyCode === 13) {
+        setPresentation(resource.value)
+    }
+    resource.value = resource.value.toLowerCase()
+})
+
+function setDownload(title, subtitle, url){
+    let download = document.getElementById('download')
+        download.classList.toggle('hide')
+    
+    let pdf = document.getElementById('pdf')
+        pdf.href = window.location.href + '&print-pdf'
+    
+    let scorm = document.getElementById('scorm')
+        scorm.addEventListener("click", event => {
+            event.preventDefault()
+            createScorm(title, subtitle, url)
+        })
+}
 
 
 async function setPresentation(input){
@@ -53,9 +81,17 @@ async function setPresentation(input){
             const parts = input.split('/')
             const category = parts[0]
             const module = parts[1]
+            
             setShare(category, module)
+
+            let href = `?cat=${category}&mod=${module}`
+
+            if (print) href += `&print-pdf`
+
             document.title = `${title} - translationAcademy slides`
-            history.pushState({page:1}, document.title, `?cat=${category}&mod=${module}`)
+            history.pushState({page:1}, document.title, href)
+
+            setDownload(title, subtitle, input)
 
             hideWelcome()
 
@@ -124,7 +160,7 @@ async function setPresentation(input){
 
 function showWelcome(){
     let welcome = document.getElementById('welcome')
-        welcome.classList.toggle('hide')
+        welcome.classList.remove('hide')
         welcome.classList.add("slide-in-bck-center")
 }
 
