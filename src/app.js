@@ -335,6 +335,18 @@ function setTOC(){
         event.preventDefault()
         hideSideBar()
     })
+
+    let sliderWrapper = document.getElementById("slider-wrapper")
+    sliderWrapper.addEventListener('click', event => {
+        event.preventDefault()
+        hideSideBar()
+    })
+
+    let welcome = document.getElementById("welcome")
+    welcome.addEventListener('click', event => {
+        event.preventDefault()
+        hideSideBar()
+    })
 }
 setTOC()
 
