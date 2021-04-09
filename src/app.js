@@ -4,6 +4,8 @@ import createScorm from './scorm-creator.js'
 import 'reveal.js/dist/reveal.css'
 import 'reveal.js/dist/theme/black.css'
 import './spectre.scss'
+import YAML from 'yaml'
+import jsonFind from 'json-find'
 
 const baseUrl = window.location.origin + window.location.pathname
 const queryString = window.location.search
@@ -54,6 +56,13 @@ function setDownload(title, subtitle, url){
         })
 }
 
+function setProgressBar(count, percentage){
+    let viewed = document.querySelector('#progress .viewed')
+        viewed.innerHTML = count
+
+    let progress = document.querySelector('#progress .percentage')
+        progress.innerHTML = percentage
+}
 
 async function setPresentation(input){
 
@@ -107,6 +116,8 @@ async function setPresentation(input){
              let viewed = []
              let totalSlides = 0
              let progress = 0
+
+             
             
              deck.initialize().then( e => {
                 totalSlides = deck.getTotalSlides()
@@ -119,11 +130,12 @@ async function setPresentation(input){
                 if ( !viewed.includes(pos) ) viewed.push(pos)
             
                 progress = Math.round((viewed.length/totalSlides)*100)
-            
-                console.log(`${viewed.length}/${totalSlides} slides viewed. (${progress}%)`)
+
+                setProgressBar(`${viewed.length}/${totalSlides} slides viewed.`, progress)
+
              })
             
-             deck.on( 'slidetransitionend', e => {
+             deck.on( 'slidechanged', e => {
             
                 console.log( deck.getProgress() )
                 console.log('slide changed') 
@@ -134,7 +146,7 @@ async function setPresentation(input){
             
                 progress = Math.round((viewed.length/totalSlides)*100)
             
-                console.log(`${viewed.length}/${totalSlides} slides viewed. (${progress}%)`)
+                setProgressBar(`${viewed.length}/${totalSlides} slides viewed.`, progress)
             });
             
     
@@ -211,3 +223,124 @@ function showError(){
 
     document.getElementById('resource').classList.add('error')
 }
+
+
+async function parseYAML(url) {
+
+    return await fetch(url).then(handleErrors).then(response => response.text()).then(response => YAML.parse(response))
+}
+
+let topics = {
+    'translate' : {'title': 'Translation Manual', 'sections': []},
+    'checking' : {'title': 'Checking Manual', 'sections': []},
+    'process' : {'title': 'Process Manual', 'sections': []},
+    'intro' : {'title': 'Introduction to translationAcademy', 'sections': []},
+}
+
+async function updateTopics() {
+    for(const key in topics){
+        topics[key].sections = await parseYAML(`https://git.door43.org/unfoldingWord/en_ta/raw/branch/master/${key}/toc.yaml`)
+                                            .then(toc => toc.sections)
+                                            .catch(err => {
+                                                console.log(err)
+                                                return []
+                                            })
+    }
+    return topics
+}
+
+function createSubMenu(subject, topic){
+
+    if(subject.hasOwnProperty('link')){
+
+
+        let linkElement = document.createElement('a')
+            linkElement.href = `${baseUrl}?cat=${topic}&mod=${subject.link}`
+            linkElement.innerHTML = subject.title
+
+        let linkItem = document.createElement('li')
+            linkItem.appendChild(linkElement)    
+
+        return linkItem
+
+    }else{
+
+        let element = document.createElement('li')
+            element.innerHTML = subject.title
+
+        let list = document.createElement('ul')
+            element.appendChild(list)
+
+        subject.sections.forEach(section => {
+
+            let childElement = createSubMenu(section, topic)         
+
+                 list.appendChild(childElement)
+
+        })
+
+        return(element)
+    }
+    
+
+}
+
+
+function createMenu(source){
+    let menuList = document.createElement('ul')
+        menuList.id = 'main-menu'
+
+        console.log(source)
+    for(const key in source){
+    const menu = createSubMenu(source[key], key)  
+            if (menu){
+                menuList.appendChild(menu)
+            }               
+    }
+    return menuList
+}
+
+updateTopics().then(
+    (doc) => {
+        const menu = createMenu(doc)
+        document.getElementById('sidebar').appendChild(menu)
+    }
+)
+
+function showSideBar(){
+    let sidebar = document.getElementById('sidebar')
+        sidebar.classList.remove('hide')
+        sidebar.classList.remove("slide-out-left")
+        sidebar.classList.add('slide-in-left')
+}
+
+function hideSideBar(){
+    let sidebar = document.getElementById('sidebar')
+        sidebar.classList.remove('slide-in-left')     
+        sidebar.classList.add("slide-out-left")
+        setTimeout( () => { 
+            sidebar.classList.add('hide')
+        }, 1000)
+}
+
+function setTOC(){
+    let toc = document.getElementById('toc')
+    toc.addEventListener('click', (event) => {
+        event.preventDefault()
+        showSideBar()
+    })
+
+    let exitToc = document.querySelector('#sidebar .exit')
+    exitToc.addEventListener('click', event => {
+        event.preventDefault()
+        hideSideBar()
+    })
+}
+setTOC()
+
+/* document.addEventListener('click', event => {
+    const sidebar = document.getElementById('#sidebar')
+    if(!event.path.includes(sidebar)){
+        hideSideBar()
+    }
+}) */
