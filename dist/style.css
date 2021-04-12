@@ -120,14 +120,31 @@ label.error{
   margin-top: 20px;
 }
 
+.autoComplete_list {
+  display: grid;
+  grid-gap: 15px;
+  margin-top: 20px;
+  color: #f1f5ff;
+}
+
+.autoComplete_list a{
+  color: rgba(194, 203, 255, 0.671)!important;
+  font-weight: 100;
+}
+
+.autoComplete_list a .autoComplete_highlighted{
+  font-weight: 700!important;
+  color: #fff;
+}
+
 .slide-in-bck-center {
-	-webkit-animation: slide-in-bck-center 0.7s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-	        animation: slide-in-bck-center 0.7s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+	-webkit-animation: slide-in-bck-center 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+	        animation: slide-in-bck-center 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
 }
 
 .slide-out-left {
-	-webkit-animation: slide-out-left 1s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
-	        animation: slide-out-left 1s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+	-webkit-animation: slide-out-left 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+	        animation: slide-out-left 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
 }
 
 .slide-in-left {

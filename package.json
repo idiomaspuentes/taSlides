@@ -19,6 +19,7 @@
     "webpack-cli": "^4.6.0"
   },
   "dependencies": {
+    "@tarekraafat/autocomplete.js": "^9.0.0",
     "file-saver": "^2.0.5",
     "json-find": "^2.0.8",
     "jszip": "^3.6.0",
