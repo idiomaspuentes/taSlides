@@ -10,15 +10,15 @@
 </head>
 <body>
     <div id="welcome" class="hide">
-        <h1>Welcome to translationAcademy slides <sup>alpha</sup></h1>
-        <p>enter the resource folder and name</p>
-        <input id="resource" type="text" placeholder="e.g. translate/figs-inclusive">
-        <label id="error-message" class="error hide" for="resource">resource not found</label>
-        <input id="submit" type="button" value="submit">
+        <h1><span class="l10n" data-content="welcome-to-tAs">Welcome to translationAcademy slides</span> <sup>alpha</sup></h1>
+        <p>enter the resource name</p>
+        <input id="resource" type="text" placeholder="search">
+        <label id="error-message" class="error hide" for="resource"><span class="l10n" data-content="res-not-found">resource not found</span></label>
+        <!-- <input id="submit" type="button" value="submit"> -->
     </div>
     <div id="sidebar" class="hide">
         <div class="exit"><a href="#" class="btn btn-primary text-secondary dropdown-toggle" tabindex="0">
-            Exit table of contents <i class="icon icon-caret"></i>
+            <span class="l10n" data-content="exit-toc">Exit table of contents</span> <i class="icon icon-caret"></i>
         </a></div>
         
         <div class="tools">
@@ -27,18 +27,18 @@
         
     </div> 
     <div id="progress">
-        <span class="viewed">1/10 slides viewed</span> (<span class="percentage">0</span>%) 
+        <span class="viewed">1/10 <span class="l10n" data-content="slides-viewed">slides viewed</span></span> (<span class="percentage">0</span>%) 
     </div>
     <div id="menu">
         <div id="home">
             <a href="#" class="btn btn-link text-secondary dropdown-toggle" tabindex="0">
-                home <i class="icon icon-caret"></i>
+                <span class="l10n" data-content="home">home</span> <i class="icon icon-caret"></i>
             </a>
         </div>
         <div id="share-presentation">
             <div class="dropdown">
                 <a href="#" class="btn btn-link text-secondary dropdown-toggle" tabindex="0">
-                  share <i class="icon icon-caret"></i>
+                    <span class="l10n" data-content="share">share</span> <i class="icon icon-caret"></i>
                 </a>
                 <!-- menu component -->
                 <ul class="menu">
@@ -54,7 +54,7 @@
                     </li>
                     <li class="menu-item">
                         <a id="copy-link" href="#">
-                        <i class="icon icon-link"></i> Share Link
+                        <i class="icon icon-link"></i> <span class="l10n" data-content="share-link">share link</span>
                         </a>
                     </li>
                 </ul>
@@ -63,13 +63,13 @@
         <div id="download" class="hide">
             <div class="dropdown">
                 <a href="#" class="btn btn-link text-secondary dropdown-toggle" tabindex="0">
-                  download <i class="icon icon-caret"></i>
+                    <span class="l10n" data-content="download">download</span> <i class="icon icon-caret"></i>
                 </a>
                 <!-- menu component -->
                 <ul class="menu">
                     <li class="menu-item">
                         <a id="pdf" href="#" class="disabled">
-                            <i class="icon icon-link"></i> pdf (soon)
+                            <i class="icon icon-link"></i> pdf (<span class="l10n" data-content="soon">soon</span>)
                         </a>
                     </li>
                     <li class="menu-item">
@@ -82,7 +82,7 @@
         </div>
         <div id="toc">
             <a href="#" class="btn btn-link text-secondary dropdown-toggle" tabindex="0">
-                Table of contents <i class="icon icon-caret"></i>
+                <span class="l10n" data-content="table-of-contents">table of contents</span> <i class="icon icon-caret"></i>
             </a>
         </div>
         
@@ -91,8 +91,8 @@
         <div class="slides">
     
             <section>
-                <h2 id="course-title">Course Title</h2>
-                <p id="course-subtitle">Course subtitle</p>
+                <h2 id="course-title"></h2>
+                <p id="course-subtitle"></p>
             </section>
     
             <section data-markdown="markdown-src"
@@ -108,7 +108,7 @@
             </section>
     
             <section>
-                <h2 id="bye-message">Thank you for viewing this lesson! ;)</h2>
+                <h2 id="bye-message"><span class="l10n" data-content="thank-you-for-viewing">Thank you for viewing this lesson! ;)</span></h2>
                 <p>soon you'll be able to download this presentation as <strong>pdf</strong></p>
             </section>
     

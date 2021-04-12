@@ -5,17 +5,20 @@ import 'reveal.js/dist/reveal.css'
 import 'reveal.js/dist/theme/black.css'
 import './spectre.scss'
 import YAML from 'yaml'
-import jsonFind from 'json-find'
+import autoComplete from '@tarekraafat/autocomplete.js'
 
 const baseUrl = window.location.origin + window.location.pathname
 const queryString = window.location.search
 const urlParams = new URLSearchParams(queryString)
 const category = urlParams.get('cat')
 const module = urlParams.get('mod')
+const hasOrg = urlParams.has('org')
+const hasLang = urlParams.has('lang')
+const org = hasOrg ? urlParams.get('org') : 'unfoldingWord'
+const lang = hasLang ? urlParams.get('lang') : 'en'
 const print = urlParams.has('print-pdf')
-console.log(print)
 
-document.querySelector('#home a').href = baseUrl
+document.querySelector('#home a').href = baseUrl + `${hasOrg ? ('?org=' + org + '&') : ''}${hasLang ? ('lang=' + lang ) : ''}`
 
 setShare()
 
@@ -28,10 +31,10 @@ if(category && module){
     showWelcome()
 }
 
-document.getElementById('submit').addEventListener('click', async () => {
+/* document.getElementById('submit').addEventListener('click', async () => {
     const input = document.getElementById('resource').value.toLowerCase()
     setPresentation(input)
-})
+}) */
 
 const resource = document.getElementById('resource');
 resource.addEventListener('keyup', event => {
@@ -68,17 +71,17 @@ async function setPresentation(input){
 
     try{
 
-        const title = await fetch(`https://git.door43.org/unfoldingWord/en_ta/raw/branch/master/${input}/title.md`)
+        const title = await fetch(`https://git.door43.org/${org}/${lang}_ta/raw/branch/master/${input}/title.md`)
             .then(handleErrors)
             .then( response => response.text() )
             .catch( err => {throw err})
 
-        const subtitle = await fetch(`https://git.door43.org/unfoldingWord/en_ta/raw/branch/master/${input}/sub-title.md`)
+        const subtitle = await fetch(`https://git.door43.org/${org}/${lang}_ta/raw/branch/master/${input}/sub-title.md`)
             .then(handleErrors)
             .then(response => response.text())
             .catch( err => {throw err})
 
-        const courseURL = `https://git.door43.org/unfoldingWord/en_ta/raw/branch/master/${input}/01.md`
+        const courseURL = `https://git.door43.org/${org}/${lang}_ta/raw/branch/master/${input}/01.md`
 
         const courseContent = await fetch(courseURL)
             .then(handleErrors)
@@ -94,6 +97,7 @@ async function setPresentation(input){
             setShare(category, module, title)
 
             let href = `?cat=${category}&mod=${module}`
+                href += `${hasOrg ? ('&org=' + org + '&') : ''}${hasLang ? ('lang=' + lang ) : ''}`
 
             if (print) href += `&print-pdf`
 
@@ -192,6 +196,7 @@ function setShare(category = '', module = '', title = ''){
 
     if(category && module)
         shareLink += `?cat=${category}&mod=${module}`
+        shareLink += `${hasOrg ? ('&org=' + org + '&') : ''}${hasLang ? ('lang=' + lang ) : ''}`
     
     let telegram = document.getElementById("telegram")
           telegram.href = `https://t.me/share/url?url=${encodeURIComponent(shareLink)}&text=${encodeURIComponent(message)}`
@@ -230,21 +235,41 @@ async function parseYAML(url) {
     return await fetch(url).then(handleErrors).then(response => response.text()).then(response => YAML.parse(response))
 }
 
-let topics = {
-    'translate' : {'title': 'Translation Manual', 'sections': []},
-    'checking' : {'title': 'Checking Manual', 'sections': []},
-    'process' : {'title': 'Process Manual', 'sections': []},
-    'intro' : {'title': 'Introduction to translationAcademy', 'sections': []},
+
+async function getProjects(){ 
+    
+    let projects = await parseYAML(`https://git.door43.org/${org}/${lang}_ta/raw/branch/master/manifest.yaml`)
+                        .then( response =>{
+                            let projects = {}
+                            response.projects.forEach(element => {
+                                
+                                projects[element.identifier] = 
+                                {
+                                    'title' : element.title,
+                                    'sections' : []
+                                }
+
+                            })
+                            return projects
+                        })
+                        .then( updateTopics )
+                        .catch( err => {console.log(err)})
+
+    return projects
 }
 
-async function updateTopics() {
+async function updateTopics(topics) {
+
     for(const key in topics){
-        topics[key].sections = await parseYAML(`https://git.door43.org/unfoldingWord/en_ta/raw/branch/master/${key}/toc.yaml`)
-                                            .then(toc => toc.sections)
-                                            .catch(err => {
-                                                console.log(err)
-                                                return []
-                                            })
+
+        topics[key].sections = await parseYAML(`https://git.door43.org/${org}/${lang}_ta/raw/branch/master/${key}/toc.yaml`)
+
+        .then(toc => toc.sections)
+        .catch(err => {
+            console.log(err)
+            return []
+        })
+
     }
     return topics
 }
@@ -253,13 +278,16 @@ function createSubMenu(subject, topic){
 
     if(subject.hasOwnProperty('link')){
 
-
         let linkElement = document.createElement('a')
             linkElement.href = `${baseUrl}?cat=${topic}&mod=${subject.link}`
+            linkElement.href += `${hasOrg ? ('&org=' + org + '&') : ''}${hasLang ? ('lang=' + lang ) : ''}`
+            linkElement.setAttribute('data-topic', topic)
+            linkElement.setAttribute('data-module', subject.link)
             linkElement.innerHTML = subject.title
 
         let linkItem = document.createElement('li')
-            linkItem.appendChild(linkElement)    
+            linkItem.appendChild(linkElement)
+            linkItem.classList.add('module')
 
         return linkItem
 
@@ -272,19 +300,18 @@ function createSubMenu(subject, topic){
             element.appendChild(list)
 
         subject.sections.forEach(section => {
+            
+            let childElement = createSubMenu(section, topic) 
 
-            let childElement = createSubMenu(section, topic)         
-
-                 list.appendChild(childElement)
+                if(childElement.classList.contains('module'))
+                element.prepend('')
+                list.appendChild(childElement)
 
         })
-
         return(element)
     }
-    
 
 }
-
 
 function createMenu(source){
     let menuList = document.createElement('ul')
@@ -300,10 +327,95 @@ function createMenu(source){
     return menuList
 }
 
-updateTopics().then(
-    (doc) => {
+getProjects()
+.then(
+    doc => {
         const menu = createMenu(doc)
         document.getElementById('sidebar').appendChild(menu)
+
+        const getLinks = (cat, subject) => {
+            if(subject.hasOwnProperty('link')){
+                const link = [{
+                    "title"         :   subject.title,
+                    "identifier"    :   subject.link,
+                    "project"       :   cat
+                }]
+                return link
+            }else{
+                let links = []
+                subject.sections.forEach( section => { links = links.concat(getLinks(cat, section)) } )
+                
+                return links
+            }
+        }
+
+        const getResourceList =  (documents) => {
+            let links = []
+            for(const section in documents){
+                links = links.concat(getLinks(section, documents[section]))
+            }
+            return links
+        }
+
+        const autoCompleteJS = new autoComplete({
+            selector: "#resource",
+        
+            placeHolder: "Search",
+        
+            data: {
+                src: getResourceList(doc),
+                key: ["title"]
+            },
+
+            trigger: {
+                event: ["input", "click"], // Any valid event type name
+            },
+        
+            resultsList: {
+                render: true,
+                element: "div",
+                idName: "autoComplete_list",
+                className: "autoComplete_list",
+                position: "afterend",
+                maxResults: 5,
+                container: (element) => {
+                    element.setAttribute("data-parent", "resource-list");
+                },
+                noResults: (list, query) => {
+                    // Create no results element
+                    const message = document.createElement("li");
+                    message.setAttribute("class", "no_result");
+                    message.setAttribute("tabindex", "1");
+                    // Add text content
+                    message.innerHTML = `<span style="display: flex; align-items: center; font-weight: 100; color: rgba(0,0,0,.2);">Found No Results for "${query}"</span>`;
+                    // Append message to results list
+                    list.appendChild(message);
+                },
+            },
+            
+            resultItem: {
+                element: "a",
+                highlight: { render: true },
+                content: (item, element) => { 
+                   
+                    element.href = `${baseUrl}?cat=${item.value.project}&mod=${item.value.identifier}${hasOrg ? ('&org=' + org + '&') : ''}${hasLang ? ('lang=' + lang ) : ''}` 
+                    
+                    let identifier = document.createElement('span')
+                        identifier.classList.add('res-identifier')
+                        identifier.innerHTML = ' (' + item.value.identifier + ')'
+        
+                    element.appendChild(identifier)
+                    
+                    element.addEventListener('click', () => { window.location = element.href })
+                }
+        
+            },
+        
+            feedback: (data) => {
+                console.log(data);
+            },
+        });
+
     }
 )
 
@@ -320,8 +432,17 @@ function hideSideBar(){
         sidebar.classList.add("slide-out-left")
         setTimeout( () => { 
             sidebar.classList.add('hide')
-        }, 1000)
+        }, 500)
 }
+
+
+/* document.addEventListener('click', event => {
+    const sidebar = document.getElementById('#sidebar')
+    if(!event.path.includes(sidebar)){
+        hideSideBar()
+    }
+}) */
+
 
 function setTOC(){
     let toc = document.getElementById('toc')
@@ -350,9 +471,5 @@ function setTOC(){
 }
 setTOC()
 
-/* document.addEventListener('click', event => {
-    const sidebar = document.getElementById('#sidebar')
-    if(!event.path.includes(sidebar)){
-        hideSideBar()
-    }
-}) */
+
+
