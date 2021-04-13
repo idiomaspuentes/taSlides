@@ -18,6 +18,7 @@ const org = hasOrg ? urlParams.get('org') : 'unfoldingWord'
 const lang = hasLang ? urlParams.get('lang') : 'en'
 const print = urlParams.has('print-pdf')
 
+
 document.querySelector('#home a').href = baseUrl + `${hasOrg ? ('?org=' + org + '&') : ''}${hasLang ? ('lang=' + lang ) : ''}`
 
 setShare()
@@ -51,6 +52,7 @@ function setDownload(title, subtitle, url){
     
     let pdf = document.getElementById('pdf')
         pdf.href = window.location.href + '&print-pdf'
+        pdf.setAttribute("target", "_blank");
     
     let scorm = document.getElementById('scorm')
         scorm.addEventListener("click", event => {
@@ -120,37 +122,59 @@ async function setPresentation(input){
              let viewed = []
              let totalSlides = 0
              let progress = 0
-
+             let timer
+             let checkMark = document.getElementById('viewed-mark')
              
             
              deck.initialize().then( e => {
+
+                if(print){
+                    hideElement(document.getElementById('menu'))
+                    window.print()
+                }
                 totalSlides = deck.getTotalSlides()
+
+                clearTimeout(timer)
             
                 console.log("current slide:",e.indexh, e.indexv)
                 console.log("total slides:",deck.getTotalSlides())
             
                 const pos = `${e.indexh},${e.indexv}`
-            
-                if ( !viewed.includes(pos) ) viewed.push(pos)
-            
-                progress = Math.round((viewed.length/totalSlides)*100)
 
-                setProgressBar(`${viewed.length}/${totalSlides} slides viewed.`, progress)
+                if ( viewed.includes(pos) ) showElement(checkMark)
+                else hideElement(checkMark)
+            
+                imer = setTimeout(() => {
+                    if ( !viewed.includes(pos) ) viewed.push(pos)            
+                    progress = Math.round((viewed.length/totalSlides)*100)
+                    showElement(checkMark)
+                    setProgressBar(`${viewed.length}/${totalSlides} slides viewed.`, progress)
+                }, 1500);
 
              })
             
              deck.on( 'slidechanged', e => {
-            
+
+                clearTimeout(timer)
+
+                console.log(e)
+
                 console.log( deck.getProgress() )
                 console.log('slide changed') 
             
                 const pos = `${e.indexh},${e.indexv}`
+
+                if ( viewed.includes(pos) ) showElement(checkMark)
+                else hideElement(checkMark)
+
+                timer = setTimeout(() => {
+                    if ( !viewed.includes(pos) ) viewed.push(pos)            
+                    progress = Math.round((viewed.length/totalSlides)*100)
+                    showElement(checkMark)
+                    setProgressBar(`${viewed.length}/${totalSlides} slides viewed.`, progress)
+                }, 1500);
                 
-                if ( !viewed.includes(pos) ) viewed.push(pos)
-            
-                progress = Math.round((viewed.length/totalSlides)*100)
-            
-                setProgressBar(`${viewed.length}/${totalSlides} slides viewed.`, progress)
+                                            
             });
             
     
@@ -178,6 +202,14 @@ function showWelcome(){
     let welcome = document.getElementById('welcome')
         welcome.classList.remove('hide')
         welcome.classList.add("slide-in-bck-center")
+}
+
+function hideElement(el){
+    el.classList.add('hide')
+}
+
+function showElement(el){
+    el.classList.remove('hide')
 }
 
 function hideWelcome(){
@@ -380,7 +412,7 @@ getProjects()
         
             data: {
                 src: getResourceList(doc),
-                key: ["title", "identifier"]
+                key: ["title"]
             },
 
             trigger: {

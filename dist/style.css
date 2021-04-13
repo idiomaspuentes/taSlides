@@ -1,5 +1,9 @@
+
+
 body{
   background-color: rgb(6, 10, 37)!important;
+  color-adjust: exact;
+  -webkit-print-color-adjust: exact;
 }
 
 #welcome{
@@ -142,6 +146,25 @@ label.error{
   font-size: 12pt;
   font-weight: 900;
   cursor: pointer;
+}
+
+#viewed-mark{
+  position: absolute;
+  top: 25px;
+  right: 25px;
+  width: 20px;
+  height: 20px;
+  font-size: 11pt;
+  padding-top: 1.5px;
+  /* border: 2px solid rgba(0, 148, 0, 0.623); */
+  background-color: rgba(0, 140, 255, 0.5);
+  /* color: rgba(0, 148, 0, 0.623); */
+  color: rgba(255, 255, 255, 0.479);
+  font-weight: 900;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 25px;
 }
 
 .slide-in-bck-center {
