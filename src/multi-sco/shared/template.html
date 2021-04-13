@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../shared/style.css">
+    <script src="../../shared/main.js" defer></script>
+    <title>item-title</title>
+</head>
+<body data-source="data-source-path">
+    <div class="reveal fade">
+    <div class="slides">
+
+        <section id="cover">
+            <h2>lesson-title</h2>
+            <p>lesson-subtitle</p>
+        </section>
+
+        <section id="content" data-markdown="source-path"
+         data-separator="(?:(\n\r?)+#)"
+         data-separator-vertical="(?:(?<=.{3,})(?:\.\s|\n\r?)|(?<=##+ *.+)(\n\r?)+)"
+         data-separator-notes="^Note:"
+         data-charset="urf-8">
+            <!--
+                Note that Windows uses `\r\n` instead of `\n` as its linefeed character.
+                For a regex that supports all operating systems, use `\r?\n` instead of `\n`.
+            -->
+        </section>
+
+        <section id="back">
+            <h2 id="not-finished" class="hide">You haven't finished this lesson yet. View all slides to mark this lesson as completed. :)</h2>
+            <h2 id="bye-message" class="hide">Great! Thank you for viewing this lesson! ;)</h2>
+        </section>
+
+    </div>
+    </div>
+</body>
+</html>

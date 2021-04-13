@@ -1,6 +1,6 @@
 import Reveal from 'reveal.js'
 import Markdown from 'reveal.js/plugin/markdown/markdown.esm.js'
-import createScorm from './scorm-creator.js'
+import {createScorm, createMultiScorm} from './scorm-creator.js'
 import 'reveal.js/dist/reveal.css'
 import 'reveal.js/dist/theme/black.css'
 import './spectre.scss'
@@ -55,7 +55,7 @@ function setDownload(title, subtitle, url){
     let scorm = document.getElementById('scorm')
         scorm.addEventListener("click", event => {
             event.preventDefault()
-            createScorm(title, subtitle, url)
+            createScorm(title, subtitle, url, org, lang)
         })
 }
 
@@ -274,6 +274,10 @@ async function updateTopics(topics) {
     return topics
 }
 
+function createMultiSco(section, topic){
+ console.log(section, topic)
+}
+
 function createSubMenu(subject, topic){
 
     if(subject.hasOwnProperty('link')){
@@ -293,8 +297,12 @@ function createSubMenu(subject, topic){
 
     }else{
 
+        let title = document.createElement('span')
+            title.classList.add('section-title')
+            title.innerHTML = subject.title
+
         let element = document.createElement('li')
-            element.innerHTML = subject.title
+            element.appendChild(title)
 
         let list = document.createElement('ul')
             element.appendChild(list)
@@ -303,8 +311,16 @@ function createSubMenu(subject, topic){
             
             let childElement = createSubMenu(section, topic) 
 
-                if(childElement.classList.contains('module'))
-                element.prepend('')
+                if(!element.classList.contains('batch-pack')){
+                    element.classList.add('batch-pack')
+                    let downloadButton = document.createElement('a')
+                        downloadButton.classList.add('download-button')
+                        downloadButton.innerHTML = '⭳'
+                        downloadButton.addEventListener('click', () => {createMultiScorm(subject, topic, org, lang)})
+
+                    title.append(downloadButton)
+                }
+                
                 list.appendChild(childElement)
 
         })
@@ -364,7 +380,7 @@ getProjects()
         
             data: {
                 src: getResourceList(doc),
-                key: ["title"]
+                key: ["title", "identifier"]
             },
 
             trigger: {

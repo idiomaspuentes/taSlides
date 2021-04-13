@@ -1,0 +1,163 @@
+<manifest xmlns="http://www.imsproject.org/xsd/imscp_rootv1p1p2"
+          xmlns:adlcp="http://www.adlnet.org/xsd/adlcp_rootv1p2"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          identifier="process-manual"
+          version="1.0"
+          xsi:schemaLocation="http://www.imsproject.org/xsd/imscp_rootv1p1p2 SCORM-schemas/imscp_rootv1p1p2.xsd                              http://www.imsglobal.org/xsd/imsmd_rootv1p2p1 SCORM-schemas/imsmd_rootv1p2p1.xsd                              http://www.adlnet.org/xsd/adlcp_rootv1p2 SCORM-schemas/adlcp_rootv1p2.xsd">
+  <metadata>
+    <schema>ADL SCORM</schema>
+    <schemaversion>1.2</schemaversion>
+  </metadata>
+  <organizations default="process-manual">
+    <organization identifier="process-manual">
+      <title xmlns="">Process Manual</title>
+      <item xmlns=""
+            identifier="step-1:-getting-started">
+        <title>Step 1: Getting Started</title>
+        <item identifier="process-manual-item"
+              identifierref="process-manual-resource">
+          <title>Introduction to the Process Manual</title>
+        </item>
+      </item>
+      <item xmlns=""
+            identifier="step-2:-setting-up-a-translation-team">
+        <title>Step 2: Setting Up a Translation Team</title>
+        <item identifier="setup-team-item"
+              identifierref="setup-team-resource">
+          <title>Setting Up A Translation Team</title>
+        </item>
+      </item>
+      <item xmlns=""
+            identifier="step-3:-translating">
+        <title>Step 3: Translating</title>
+        <item identifier="pretranslation-training-item"
+              identifierref="pretranslation-training-resource">
+          <title>Training Before Translation Begins</title>
+        </item>
+        <item identifier="platforms-item"
+              identifierref="platforms-resource">
+          <title>Choosing a Translation Platform</title>
+        </item>
+        <item identifier="setup-ts-item"
+              identifierref="setup-ts-resource">
+          <title>Setting Up translationStudio</title>
+        </item>
+        <item identifier="translation-overview-item"
+              identifierref="translation-overview-resource">
+          <title>Translation Overview</title>
+        </item>
+      </item>
+      <item xmlns=""
+            identifier="step-4:-checking">
+        <title>Step 4: Checking</title>
+        <item identifier="prechecking-training-item"
+              identifierref="prechecking-training-resource">
+          <title>Training Before Checking Begins</title>
+        </item>
+        <item identifier="setup-tc-item"
+              identifierref="setup-tc-resource">
+          <title>Setting Up translationCore</title>
+        </item>
+      </item>
+      <item xmlns=""
+            identifier="step-5:-publishing">
+        <title>Step 5: Publishing</title>
+        <item identifier="intro-publishing-item"
+              identifierref="intro-publishing-resource">
+          <title>Introduction to Publishing</title>
+        </item>
+      </item>
+      <item xmlns=""
+            identifier="step-6:-distributing">
+        <title>Step 6: Distributing</title>
+        <item identifier="intro-share-item"
+              identifierref="intro-share-resource">
+          <title>Introduction to Distribution</title>
+        </item>
+        <item identifier="share-content-item"
+              identifierref="share-content-resource">
+          <title>How to Share Content</title>
+        </item>
+      </item>
+    </organization>
+  </organizations>
+  <resources>
+    <resource xmlns=""
+              identifier="process-manual-resource"
+              type="webcontent"
+              adlcp:scormtype="sco"
+              href="resources/process/process-manual.html">
+      <file href="resources/process/process-manual.html" />
+    </resource>
+    <resource xmlns=""
+              identifier="setup-team-resource"
+              type="webcontent"
+              adlcp:scormtype="sco"
+              href="resources/process/setup-team.html">
+      <file href="resources/process/setup-team.html" />
+    </resource>
+    <resource xmlns=""
+              identifier="pretranslation-training-resource"
+              type="webcontent"
+              adlcp:scormtype="sco"
+              href="resources/process/pretranslation-training.html">
+      <file href="resources/process/pretranslation-training.html" />
+    </resource>
+    <resource xmlns=""
+              identifier="platforms-resource"
+              type="webcontent"
+              adlcp:scormtype="sco"
+              href="resources/process/platforms.html">
+      <file href="resources/process/platforms.html" />
+    </resource>
+    <resource xmlns=""
+              identifier="setup-ts-resource"
+              type="webcontent"
+              adlcp:scormtype="sco"
+              href="resources/process/setup-ts.html">
+      <file href="resources/process/setup-ts.html" />
+    </resource>
+    <resource xmlns=""
+              identifier="translation-overview-resource"
+              type="webcontent"
+              adlcp:scormtype="sco"
+              href="resources/process/translation-overview.html">
+      <file href="resources/process/translation-overview.html" />
+    </resource>
+    <resource xmlns=""
+              identifier="prechecking-training-resource"
+              type="webcontent"
+              adlcp:scormtype="sco"
+              href="resources/process/prechecking-training.html">
+      <file href="resources/process/prechecking-training.html" />
+    </resource>
+    <resource xmlns=""
+              identifier="setup-tc-resource"
+              type="webcontent"
+              adlcp:scormtype="sco"
+              href="resources/process/setup-tc.html">
+      <file href="resources/process/setup-tc.html" />
+    </resource>
+    <resource xmlns=""
+              identifier="intro-publishing-resource"
+              type="webcontent"
+              adlcp:scormtype="sco"
+              href="resources/process/intro-publishing.html">
+      <file href="resources/process/intro-publishing.html" />
+    </resource>
+    <resource xmlns=""
+              identifier="intro-share-resource"
+              type="webcontent"
+              adlcp:scormtype="sco"
+              href="resources/process/intro-share.html">
+      <file href="resources/process/intro-share.html" />
+    </resource>
+    <resource xmlns=""
+              identifier="share-content-resource"
+              type="webcontent"
+              adlcp:scormtype="sco"
+              href="resources/process/share-content.html">
+      <file href="resources/process/share-content.html" />
+    </resource>
+  </resources>
+</manifest>
