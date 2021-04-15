@@ -25,3 +25,5 @@
 - Create plugin to create this learing paths from within the LMS
 
 - Add support to *obsidian* as source
+
+- Figure out how to save progress made on the same sco through different learning paths.
