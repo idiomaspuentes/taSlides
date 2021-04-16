@@ -18,11 +18,6 @@ const org = hasOrg ? urlParams.get('org') : 'unfoldingWord'
 const lang = hasLang ? urlParams.get('lang') : 'en'
 const print = urlParams.has('print-pdf')
 
-
-document.querySelector('#home a').href = baseUrl + `${hasOrg ? ('?org=' + org + '&') : ''}${hasLang ? ('lang=' + lang ) : ''}`
-
-setShare()
-
 if(category && module){
     const input = document.getElementById('resource')
     const resource = `${category}/${module}`
@@ -32,19 +27,52 @@ if(category && module){
     showWelcome()
 }
 
-/* document.getElementById('submit').addEventListener('click', async () => {
-    const input = document.getElementById('resource').value.toLowerCase()
-    setPresentation(input)
-}) */
+function setHome(){
+    document.querySelector('#home a').href = baseUrl + `${hasOrg ? ('?org=' + org + '&') : ''}${hasLang ? ('lang=' + lang ) : ''}`
+}
+setHome()
 
-const resource = document.getElementById('resource');
-resource.addEventListener('keyup', event => {
+
+function setShare(category = '', module = '', title = ''){
+    let shareLink = baseUrl
+    let message = '\n\nShared from translationAcademy Slides'
+
+    if (title) message = `\n\n${title} | Slides Presentation ` + message
+
+    if(category && module)
+        shareLink += `?cat=${category}&mod=${module}`
+        shareLink += `${hasOrg ? ('&org=' + org + '&') : ''}${hasLang ? ('lang=' + lang ) : ''}`
     
-    if (event.key === 'Enter' || event.keyCode === 13) {
-        setPresentation(resource.value)
-    }
-    resource.value = resource.value.toLowerCase()
-})
+    let telegram = document.getElementById("telegram")
+          telegram.href = `https://t.me/share/url?url=${encodeURIComponent(shareLink)}&text=${encodeURIComponent(message)}`
+
+    let whatsapp = document.getElementById("whatsapp")  
+          whatsapp.href = `whatsapp://send?text=${encodeURIComponent(shareLink)} ${encodeURIComponent(message)}`
+
+    let copyLink = document.getElementById("copy-link")
+          copyLink.href = `${shareLink}`
+    
+    copyLink.addEventListener("click", (e) => {
+        e.preventDefault()
+        navigator.clipboard.writeText(copyLink.href)
+    })
+    
+}     
+setShare()
+
+
+function setResource(){
+    const resource = document.getElementById('resource');
+    resource.addEventListener('keyup', event => {
+        
+        if (event.key === 'Enter' || event.keyCode === 13) {
+            setPresentation(resource.value)
+        }
+        resource.value = resource.value.toLowerCase()
+    })
+}
+setResource()
+
 
 function setDownload(title, subtitle, url){
     let download = document.getElementById('download')
@@ -114,7 +142,7 @@ async function setPresentation(input){
             document.getElementById('course-subtitle').innerHTML = subtitle
             document.getElementById('markdown-section').setAttribute("data-markdown", courseURL);
             document.getElementById('slider-wrapper').classList.remove('hide')
-    
+
             let deck = new Reveal({
                 plugins: [ Markdown ]
              })
@@ -124,8 +152,7 @@ async function setPresentation(input){
              let progress = 0
              let timer
              let checkMark = document.getElementById('viewed-mark')
-             
-            
+
              deck.initialize().then( e => {
 
                 if(print){
@@ -173,11 +200,9 @@ async function setPresentation(input){
                     showElement(checkMark)
                     setProgressBar(`${viewed.length}/${totalSlides} slides viewed.`, progress)
                 }, 1500);
-                
-                                            
+                                                            
             });
-            
-    
+
         }else{
 
             showWelcome()
@@ -193,9 +218,7 @@ async function setPresentation(input){
         console.log('fuera')
         console.error(err)
         return
-
     }
-
 }
 
 function showWelcome(){
@@ -220,32 +243,6 @@ function hideWelcome(){
         }, 1000)
 }
 
-function setShare(category = '', module = '', title = ''){
-    let shareLink = baseUrl
-    let message = '\n\nShared from translationAcademy Slides'
-
-    if (title) message = `\n\n${title} | Slides Presentation ` + message
-
-    if(category && module)
-        shareLink += `?cat=${category}&mod=${module}`
-        shareLink += `${hasOrg ? ('&org=' + org + '&') : ''}${hasLang ? ('lang=' + lang ) : ''}`
-    
-    let telegram = document.getElementById("telegram")
-          telegram.href = `https://t.me/share/url?url=${encodeURIComponent(shareLink)}&text=${encodeURIComponent(message)}`
-
-    let whatsapp = document.getElementById("whatsapp")  
-          whatsapp.href = `whatsapp://send?text=${encodeURIComponent(shareLink)} ${encodeURIComponent(message)}`
-
-    let copyLink = document.getElementById("copy-link")
-          copyLink.href = `${shareLink}`
-    
-    copyLink.addEventListener("click", (e) => {
-        e.preventDefault()
-        navigator.clipboard.writeText(copyLink.href)
-    })
-    
-}     
-
 function handleErrors(response) {
     if (!response.ok) {
         throw Error(response.statusText);
@@ -261,12 +258,10 @@ function showError(){
     document.getElementById('resource').classList.add('error')
 }
 
-
 async function parseYAML(url) {
 
     return await fetch(url).then(handleErrors).then(response => response.text()).then(response => YAML.parse(response))
 }
-
 
 async function getProjects(){ 
     
@@ -304,10 +299,6 @@ async function updateTopics(topics) {
 
     }
     return topics
-}
-
-function createMultiSco(section, topic){
- console.log(section, topic)
 }
 
 function createSubMenu(subject, topic){
@@ -354,7 +345,6 @@ function createSubMenu(subject, topic){
                 }
                 
                 list.appendChild(childElement)
-
         })
         return(element)
     }
@@ -463,7 +453,6 @@ getProjects()
                 console.log(data);
             },
         });
-
     }
 )
 
@@ -482,15 +471,6 @@ function hideSideBar(){
             sidebar.classList.add('hide')
         }, 500)
 }
-
-
-/* document.addEventListener('click', event => {
-    const sidebar = document.getElementById('#sidebar')
-    if(!event.path.includes(sidebar)){
-        hideSideBar()
-    }
-}) */
-
 
 function setTOC(){
     let toc = document.getElementById('toc')
@@ -518,6 +498,4 @@ function setTOC(){
     })
 }
 setTOC()
-
-
 
